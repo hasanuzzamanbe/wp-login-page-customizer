@@ -1,5 +1,5 @@
 jQuery('document').ready(function($) {
-    const url = window.wpmLoginPageAdmin.assets_url + 'images/wpminers-logo.svg';
+    const url = window.wpmLoginPageAdmin.assets_url + 'images/logo-yellow.png';
     const homeUrl = window.wpmLoginPageAdmin.home_url;
     const loginTitle = window.wpmLoginPageAdmin.login_title;
     const loginDesc = window.wpmLoginPageAdmin.login_desc;

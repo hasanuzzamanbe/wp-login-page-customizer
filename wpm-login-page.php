@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: WPM Login Page
- * Plugin URI: http://wpminers.com/
+ * Plugin Name: WPM Login Page Customizer
+ * Plugin URI: https://github.com/hasanuzzamanbe/wp-login-page-customizer
  * Description: A collection of snippets for WordPress.
  * Author: Hasanuzzaman Shamim
  * Author URI: http://wpminers.com/
@@ -20,13 +20,16 @@ class WPMLoginPage {
         $this->loadRequiredFiles();
         $this->loginRedirectControl();
         $this->registerPageDesign();
-        $this->optionPageSetup();
     }
 
     public function loadRequiredFiles()
     {
         require WPM_LOGIN_PAGE_DIR . 'Modules/OptionPage.php';
         (new WPMLoginPage\Modules\OptionPage('wpm-login-page'));
+
+
+        require WPM_LOGIN_PAGE_DIR . 'Modules/Recaptcha.php';
+        (new WPMLoginPage\Modules\Recaptcha());
     }
 
 
@@ -58,12 +61,6 @@ class WPMLoginPage {
                'login_desc' => $description
            ));
        });
-
-    }
-
-    public function optionPageSetup()
-    {
-        
 
     }
 }

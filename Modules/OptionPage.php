@@ -1,8 +1,6 @@
 <?php
 
-
 namespace WPMLoginPage\Modules;
-
 
 class OptionPage {
 
@@ -13,7 +11,6 @@ class OptionPage {
     add_action( 'admin_menu', array( $this, 'addSettingsPage' ) );  
     add_action( 'admin_init', array( $this, 'registerSettings' ) );  
   }  
-
 
   public function addSettingsPage() {  
     add_options_page(  
@@ -43,6 +40,8 @@ class OptionPage {
   public function registerSettings() {  
     register_setting( $this->pluginSlug . '-settings-group', 'wpm_login_page_welcome_title' );  
     register_setting( $this->pluginSlug . '-settings-group', 'wpm_login_page_welcome_description' );  
+    register_setting( $this->pluginSlug . '-settings-group', 'wpm_login_page_recaptcha_secret_key' );  
+    register_setting( $this->pluginSlug . '-settings-group', 'wpm_login_page_recaptcha_site_key' );  
 
     add_settings_section(  
       $this->pluginSlug . '-section-general',  
@@ -60,12 +59,28 @@ class OptionPage {
     );  
 
     add_settings_field(  
-        'wpm_login_page_welcome_description',  
-        'Welcome Description',  
-        array( $this, 'textDescriptionCallback' ),  
-        $this->pluginSlug,  
-        $this->pluginSlug . '-section-general'  
-      ); 
+      'wpm_login_page_welcome_description',  
+      'Welcome Description',  
+      array( $this, 'textDescriptionCallback' ),  
+      $this->pluginSlug,  
+      $this->pluginSlug . '-section-general'  
+    ); 
+
+    add_settings_field(  
+      'wpm_login_page_recaptcha_site_key',  
+      'reCAPTCHA Site Key',  
+      array( $this, 'recaptchaSiteKeyCallback' ),  
+      $this->pluginSlug,  
+      $this->pluginSlug . '-section-general'  
+    ); 
+
+    add_settings_field(  
+      'wpm_login_page_recaptcha_secret_key',  
+      'reCAPTCHA Secret Key',  
+      array( $this, 'recaptchaSecretKeyCallback' ),  
+      $this->pluginSlug,  
+      $this->pluginSlug . '-section-general'  
+    );  
   }  
 
   public function sectionGeneralCallback() {  
@@ -80,5 +95,15 @@ class OptionPage {
   public function textDescriptionCallback() {  
     $option = get_option( 'wpm_login_page_welcome_description' );  
     echo '<textarea name="wpm_login_page_welcome_description" rows="5" cols="50">' . esc_textarea( $option ) . '</textarea>';  
+  }  
+
+  public function recaptchaSecretKeyCallback() {  
+    $option = get_option( 'wpm_login_page_recaptcha_secret_key' );  
+    echo '<input type="text" style="min-width:340px;"  name="wpm_login_page_recaptcha_secret_key" value="' . esc_attr( $option ) . '" />';  
+  }  
+
+  public function recaptchaSiteKeyCallback() {  
+    $option = get_option( 'wpm_login_page_recaptcha_site_key' );  
+    echo '<input type="text" style="min-width:340px;" name="wpm_login_page_recaptcha_site_key" value="' . esc_attr( $option ) . '" />';  
   }  
 }
