@@ -40,17 +40,28 @@ class WPMLoginPage {
             wp_safe_redirect(home_url());
             exit();
         });
-        add_filter( 'login_redirect', function () {
-            return home_url();
+        add_filter( 'login_redirect', function ($redirect_to, $request, $user) {
+            if (isset($user->roles) && is_array($user->roles)) {
+                return home_url('/dashboard');
+            } else {
+                return $redirect_to;
+            }
         }, 10, 3 );
+
+        add_action( 'template_redirect', function () {
+            if ( !is_user_logged_in() && is_page('dashboard') ) {
+                wp_redirect( wp_login_url( get_permalink() ) ); // Redirect to login page with return URL
+                exit;
+            };
+        });
     }
 
     public function registerPageDesign()
     {
 
        add_action( 'login_enqueue_scripts', function() {
-            $title = esc_html(get_option( 'wpm_login_page_welcome_title'));  
-            $description = esc_html(get_option( 'wpm_login_page_welcome_description'));  
+            $title = esc_html(get_option( 'wpm_login_page_welcome_title'));
+            $description = esc_html(get_option( 'wpm_login_page_welcome_description'));
 
            wp_enqueue_style('wpm_login_page_css', WPM_LOGIN_PAGE_URL . 'assets/css/login_page_styling.css');
            wp_enqueue_script('wpm_login_page_js', WPM_LOGIN_PAGE_URL . 'assets/js/login_page.js', array('jquery'), WPM_LOGIN_PAGE_VERSION, true);
